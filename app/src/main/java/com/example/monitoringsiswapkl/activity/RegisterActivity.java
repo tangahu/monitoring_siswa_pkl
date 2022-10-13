@@ -5,6 +5,7 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -29,8 +30,8 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        username = findViewById(R.id.username);
-        password = findViewById(R.id.password);
+        username = findViewById(R.id.tlusername);
+        password = findViewById(R.id.tlpassword);
         confirmpassword = findViewById(R.id.passwordconfirm);
 
         register = findViewById(R.id.register);
@@ -52,11 +53,13 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void moveToRegister(String user, String pass) {
+        Log.d("TAG", "moveToRegister: ");
         ApiInterface apiInterface = ApiServer.getClient().create(ApiInterface.class);
         Call<ResponseLogin> call = apiInterface.register(user, pass);
         call.enqueue(new Callback<ResponseLogin>() {
             @Override
             public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
+                Log.d("TAG", "onResponse: "+response.isSuccessful());
                 if (response.isSuccessful()) {
                     Toast.makeText(RegisterActivity.this, "Berhasil Mendaftar", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
